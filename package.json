@@ -2,13 +2,12 @@
     "name": "uno-master",
     "version": "1.0.0",
     "main": "server/server.js",
-    "description": "Unified UNO Multiplayer Game",
+    "type": "module",
     "scripts": {
         "install:all": "npm install && npm install --prefix client && npm install --prefix server",
         "dev": "node dev.js",
         "start": "node server/server.js",
-        "build": "npm install --prefix client && npm install --prefix server && npm run build --prefix client",
-        "postinstall": "npm run build"
+        "build": "npm run build --prefix client"
     },
     "devDependencies": {
         "concurrently": "^8.2.2"
