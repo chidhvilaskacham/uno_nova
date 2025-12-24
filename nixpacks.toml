@@ -3,6 +3,7 @@ nixPkgs = ["nodejs_18", "npm"]
 
 [phases.build]
 cmds = [
+  "npm install",
   "cd client && npm install",
   "cd client && npm run build",
   "cd server && npm install --production"

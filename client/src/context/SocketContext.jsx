@@ -18,7 +18,9 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         console.log("Socket: Initializing connection...");
-        const newSocket = io(); // Connects via Vite proxy to localhost:5000
+        // Connect to current host in production, localhost in development
+        const socketUrl = import.meta.env.PROD ? window.location.origin : 'http://localhost:5000';
+        const newSocket = io(socketUrl);
         setSocket(newSocket);
 
         newSocket.on('connect', () => {
