@@ -1,7 +1,7 @@
 {
     "name": "uno-master",
     "version": "1.0.0",
-    "type": "module",
+    "main": "server/server.js",
     "description": "Unified UNO Multiplayer Game",
     "scripts": {
         "install:all": "npm install && npm install --prefix client && npm install --prefix server",
