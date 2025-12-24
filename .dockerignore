@@ -7,6 +7,5 @@ client/dist
 .vscode
 *.log
 .env
-# Dockerfile (removed from ignore)
+.gemini
 README.md
-C:\Users\CHID\.gemini

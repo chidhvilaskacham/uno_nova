@@ -1,5 +1,5 @@
 # Build Stage for Frontend
-FROM node:18-bullseye-slim AS build-frontend
+FROM node:18-alpine AS build-frontend
 WORKDIR /app
 COPY client/package*.json ./client/
 RUN cd client && npm install
@@ -7,7 +7,7 @@ COPY client/ ./client/
 RUN cd client && npm run build
 
 # Production Stage
-FROM node:18-bullseye-slim
+FROM node:18-alpine
 WORKDIR /app
 
 # Set environment variables
