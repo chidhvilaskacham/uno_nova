@@ -14,7 +14,8 @@ app.get('/health', (req, res) => {
 });
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/dist')));
+const staticPath = path.join(__dirname, '../client/dist');
+app.use(express.static(staticPath));
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -193,7 +194,7 @@ io.on('connection', (socket) => {
 
 // Handle SPA routing - return all requests to React app
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 const triggerBotTurn = (roomId) => {

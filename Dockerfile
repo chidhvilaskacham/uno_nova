@@ -11,12 +11,14 @@ RUN npm run build
 # Stage 2: Production Server
 FROM node:18-slim
 WORKDIR /app
+
 # Copy server dependencies first
 COPY server/package*.json ./server/
 RUN cd server && npm install --production
 
 # Copy server source code
 COPY server/ ./server/
+
 # Copy built frontend from Stage 1
 COPY --from=build-frontend /app/client/dist ./client/dist
 
@@ -26,6 +28,10 @@ EXPOSE 5000
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5000/health || exit 1
 
 # Start server
 CMD ["node", "server/server.js"]
