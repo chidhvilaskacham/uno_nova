@@ -1,0 +1,12 @@
+node_modules
+client/node_modules
+server/node_modules
+client/dist
+.git
+.github
+.vscode
+*.log
+.env
+Dockerfile
+README.md
+C:\Users\CHID\.gemini
