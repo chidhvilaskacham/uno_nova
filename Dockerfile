@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for UNO Game
 
 # Stage 1: Build Frontend
-FROM node:18-alpine AS build-frontend
+FROM node:18-slim AS build-frontend
 WORKDIR /app/client
 COPY client/package*.json ./
 RUN npm install
@@ -9,14 +9,15 @@ COPY client/ ./
 RUN npm run build
 
 # Stage 2: Production Server
-FROM node:18-alpine
+FROM node:18-slim
 WORKDIR /app
-# Copy server dependencies first to leverage caching
+# Copy server dependencies first
 COPY server/package*.json ./server/
 RUN cd server && npm install --production
+
 # Copy server source code
 COPY server/ ./server/
-# Copy built frontend
+# Copy built frontend from Stage 1
 COPY --from=build-frontend /app/client/dist ./client/dist
 
 # Expose port
