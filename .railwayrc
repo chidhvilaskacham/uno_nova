@@ -1,0 +1,1 @@
+{"build": {"builder": "DOCKER"}, "deploy": {"startCommand": "node server/server.js"}}
