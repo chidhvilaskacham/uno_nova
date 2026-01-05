@@ -96,20 +96,25 @@ class GameLogic {
     }
 
     handleSpecialCards(card) {
+        const playerCount = this.players.length;
         if (card.value === 'skip') {
-            this.nextTurn();
+            // Skip the next player
+            this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + playerCount) % playerCount;
         } else if (card.value === 'reverse') {
-            if (this.players.length === 2) {
-                this.nextTurn();
+            if (playerCount === 2) {
+                // In 2-player games, reverse acts as a skip
+                this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + playerCount) % playerCount;
             } else {
                 this.direction *= -1;
             }
         } else if (card.value === 'draw2') {
-            this.nextTurn();
+            // Move to the next player, make them draw, and they are effectively skipped
+            this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + playerCount) % playerCount;
             const nextPlayer = this.players[this.currentPlayerIndex];
             nextPlayer.hand.push(...this.drawFromDeck(2));
         } else if (card.value === 'draw4') {
-            this.nextTurn();
+            // Same as draw2 but 4 cards
+            this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + playerCount) % playerCount;
             const nextPlayer = this.players[this.currentPlayerIndex];
             nextPlayer.hand.push(...this.drawFromDeck(4));
         }
@@ -126,7 +131,7 @@ class GameLogic {
         const drawnCard = this.drawFromDeck(1)[0];
         player.hand.push(drawnCard);
 
-        // After drawing, if it's playable, the player can choose to play it (simplified: just pass turn)
+        // After drawing, move to next turn
         this.nextTurn();
         return { success: true };
     }
@@ -142,7 +147,8 @@ class GameLogic {
     }
 
     nextTurn() {
-        this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + this.players.length) % this.players.length;
+        const playerCount = this.players.length;
+        this.currentPlayerIndex = (this.currentPlayerIndex + this.direction + playerCount) % playerCount;
     }
 
     getBotMove(botId) {

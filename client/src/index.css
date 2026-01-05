@@ -27,31 +27,47 @@
   }
 }
 
-/* Zero-G Stars Background */
-.stars-container {
+/* Scan Grid Background */
+.scan-grid {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(1px 1px at 20% 30%, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(1px 1px at 40% 70%, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(1.5px 1.5px at 50% 10%, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(1.5px 1.5px at 80% 40%, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(1px 1px at 90% 90%, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 10% 80%, #fff, rgba(0, 0, 0, 0));
-  background-size: 300px 300px;
-  opacity: 0.3;
-  animation: drift 150s linear infinite;
+  background-image: 
+    linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  animation: grid-drift 20s linear infinite;
+  opacity: 0.4;
 }
 
-@keyframes drift {
-  from {
-    background-position: 0 0;
-  }
+@keyframes grid-drift {
+  0% { transform: perspective(500px) rotateX(20deg) translateY(0); }
+  100% { transform: perspective(500px) rotateX(20deg) translateY(50px); }
+}
 
-  to {
-    background-position: 1000px 1000px;
-  }
+.glass-space {
+  background: rgba(8, 10, 15, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 30px rgba(0, 242, 255, 0.02);
+  clip-path: polygon(
+    0 20px, 20px 0, 
+    100% 0, 100% calc(100% - 20px), 
+    calc(100% - 20px) 100%, 
+    0 100%
+  );
+}
+
+/* Corner Accents for Glass Space */
+.glass-space::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 40px; height: 40px;
+  background: linear-gradient(-45deg, rgba(0, 242, 255, 0.1), transparent 50%);
+  pointer-events: none;
 }
 
 /* Obsidian Glass Material */

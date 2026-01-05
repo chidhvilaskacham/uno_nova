@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-
 const SocketContext = createContext();
 
 export const useSocket = () => useContext(SocketContext);
@@ -15,6 +14,8 @@ export const SocketProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [winner, setWinner] = useState(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [lastAction, setLastAction] = useState(null);
+    const [publicRooms, setPublicRooms] = useState([]);
 
     useEffect(() => {
         console.log("Socket: Initializing connection...");
@@ -52,11 +53,12 @@ export const SocketProvider = ({ children }) => {
             if (hand) setHand(hand);
         });
 
-        newSocket.on('game_update', ({ gameState, players, hand }) => {
-            console.log("Socket: Game update", hand);
+        newSocket.on('game_update', ({ gameState, players, hand, lastAction }) => {
+            console.log("Socket: Game update", lastAction);
             setGameState(gameState);
             setPlayers(players);
             if (hand) setHand(hand);
+            if (lastAction) setLastAction(lastAction);
         });
 
         newSocket.on('game_over', ({ winner }) => {
@@ -70,16 +72,32 @@ export const SocketProvider = ({ children }) => {
             setTimeout(() => setError(null), 3000);
         });
 
+        newSocket.on('public_rooms_update', (rooms) => {
+            console.log("Socket: Public rooms update", rooms);
+            setPublicRooms(rooms);
+        });
+
         return () => newSocket.close();
     }, []);
 
-    const createRoom = (name) => {
+    const createRoom = (name, isPublic = false) => {
+        if (!socket) {
+            console.error("Socket not initialized");
+            return;
+        }
         setPlayerName(name);
-        socket.emit('create_room', { playerName: name });
+        socket.emit('create_room', { playerName: name, isPublic });
+    };
+
+    const getPublicRooms = () => {
+        if (socket) socket.emit('request_public_rooms');
     };
 
     const joinRoom = (id, name) => {
-        if (!socket) return;
+        if (!socket) {
+            console.error("Socket not initialized");
+            return;
+        }
         setPlayerName(name);
         socket.emit('join_room', { roomId: id, playerName: name });
     };
@@ -106,7 +124,10 @@ export const SocketProvider = ({ children }) => {
         error,
         winner,
         isConnected,
+        lastAction,
+        publicRooms,
         createRoom,
+        getPublicRooms,
         joinRoom,
         startGame,
         playCard,
