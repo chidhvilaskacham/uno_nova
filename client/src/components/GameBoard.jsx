@@ -415,7 +415,6 @@ const GameBoard = () => {
                                             layout
                                             initial={{ y: 50, opacity: 0 }}
                                             animate={{
-                                                y: 0,
                                                 opacity: 1,
                                                 rotate: (i - (hand.length - 1) / 2) * 5, // Slight fan
                                                 y: Math.abs(i - (hand.length - 1) / 2) * 10 // Arc effect
