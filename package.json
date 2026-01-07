@@ -1,16 +1,44 @@
 {
-    "name": "uno-master",
+    "name": "uno-nova-unified",
     "version": "1.0.0",
-    "main": "server/server.js",
     "type": "module",
+    "main": "src/server/server.js",
     "scripts": {
-        "install:all": "npm install && npm install --prefix client && npm install --prefix server",
-        "dev": "node start-dev.js",
-        "start": "node server/server.js",
-        "build": "npm run build --prefix client"
+        "dev": "run-p server:dev client:dev",
+        "client:dev": "vite",
+        "server:dev": "node --watch src/server/server.js",
+        "build": "vite build",
+        "start": "node src/server/server.js",
+        "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
     },
-    "devDependencies": {},
     "dependencies": {
-        "dotenv": "^17.2.3"
+        "axios": "^1.13.2",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.2.1",
+        "framer-motion": "^11.0.0",
+        "knex": "^3.1.0",
+        "lucide-react": "^0.400.0",
+        "mongoose": "^9.1.1",
+        "pg": "^8.16.3",
+        "profanity-cleaner": "^0.0.3",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-qr-code": "^2.0.18",
+        "react-router-dom": "^7.11.0",
+        "socket.io": "^4.8.1",
+        "socket.io-client": "^4.7.5"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.66",
+        "@types/react-dom": "^18.2.22",
+        "@vitejs/plugin-react": "^4.2.1",
+        "autoprefixer": "^10.4.23",
+        "concurrently": "^8.2.2",
+        "npm-run-all": "^4.1.5",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^3.4.19",
+        "vite": "^5.2.8"
     }
 }

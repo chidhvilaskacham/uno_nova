@@ -10,6 +10,11 @@ export default {
                 'neon-red': '#ff3e3e',
                 'neon-blue': '#00f2ff',
                 'neon-green': '#39ff14',
+                'deep-space': '#020408',
+                'nebula-core': '#0f172a',
+                'electric-cyan': '#00f0ff',
+                'neon-violet': '#b5179e',
+                'hologram-teal': '#4cc9f0',
                 uno: {
                     red: '#ef4444',
                     blue: '#3b82f6',

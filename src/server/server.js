@@ -1,14 +1,25 @@
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const cors = require('cors');
-const GameLogic = require('./utils/GameLogic');
-const mongoose = require('mongoose');
-const { clean } = require('profanity-cleaner');
-const ChatMessage = require('./models/ChatMessage');
-const EmoteAnalytics = require('./models/EmoteAnalytics');
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import profanityCleaner from 'profanity-cleaner';
+const { clean } = profanityCleaner;
+
+import GameLogic from './utils/GameLogic.js';
+import ChatMessage from './models/ChatMessage.js';
+import EmoteAnalytics from './models/EmoteAnalytics.js';
+
+// Construct __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Configure Dotenv
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+
 const app = express();
 app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
@@ -25,7 +36,7 @@ app.get('/health', (req, res) => {
 });
 
 // Serve static files from the React app
-const staticPath = path.join(__dirname, '../client/dist');
+const staticPath = path.join(__dirname, '../../dist');
 app.use(express.static(staticPath));
 
 const server = http.createServer(app);

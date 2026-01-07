@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const emoteAnalyticsSchema = new mongoose.Schema({
     playerId: {
@@ -24,4 +24,4 @@ const emoteAnalyticsSchema = new mongoose.Schema({
 // Compound index to quickly find and update emote usage per player
 emoteAnalyticsSchema.index({ playerId: 1, emoteType: 1 }, { unique: true });
 
-module.exports = mongoose.model('EmoteAnalytics', emoteAnalyticsSchema);
+export default mongoose.model('EmoteAnalytics', emoteAnalyticsSchema);

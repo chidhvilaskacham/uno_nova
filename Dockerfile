@@ -1,31 +1,41 @@
-# Build Stage for Frontend
-FROM node:18-alpine AS build-frontend
-WORKDIR /app
-COPY client/package*.json ./client/
-RUN cd client && npm install
-COPY client/ ./client/
-RUN cd client && npm run build
+# Stage 1: Build the Frontend
+FROM node:18-alpine AS builder
 
-# Production Stage
+WORKDIR /app
+
+# Copy package.json and lockfile
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies for Vite build)
+RUN npm install
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the Vite app (outputs to /app/dist)
+RUN npm run build
+
+# Stage 2: Production Server
 FROM node:18-alpine
+
 WORKDIR /app
 
-# Set environment variables
+# Set production environment
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Copy server dependencies first for caching
-COPY server/package*.json ./server/
-RUN cd server && npm install --production
+# Copy package.json and install ONLY production dependencies
+COPY package*.json ./
+RUN npm install --omit=dev
 
-# Copy server source
-COPY server/ ./server/
+# Copy the built frontend from the builder stage
+COPY --from=builder /app/dist ./dist
 
-# Copy built frontend from build stage
-COPY --from=build-frontend /app/client/dist ./client/dist
+# Copy the server source code
+COPY src/server ./src/server
 
-# Expose port
+# Expose the application port
 EXPOSE 5000
 
-# Start server
-CMD ["node", "server/server.js"]
+# Start the server
+CMD ["node", "src/server/server.js"]
